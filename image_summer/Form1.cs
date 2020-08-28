@@ -23,11 +23,19 @@ namespace image_summer
                 return;
             try
             {
-                picture.Image = new Bitmap(of.FileName);
+                Bitmap src = new Bitmap(of.FileName);
+                Bitmap newBmp = new Bitmap(src.Width, src.Height, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
+
+                using (Graphics gfx = Graphics.FromImage(newBmp))
+                {
+                    gfx.DrawImage(src, 0, 0, src.Width,src.Height);
+                }
+
+            picture.Image = newBmp;
             }
             catch { return; }
-            }
-        int x0 = 0, y0 = 0, x1=0, y1=0;
+        }
+        int x0 = 0, y0 = 0, x1=0, y1=0, X=0, Y=0;
 
         private void picture_Paint(object sender, PaintEventArgs e)
         {
@@ -41,7 +49,8 @@ namespace image_summer
             }
 
             //calc
-            int X = x1 - x0 + 1, Y = y1 - y0 + 1;
+            X = x1 - x0 + 1;
+            Y = y1 - y0 + 1;
             double t = 0;
             double s = 0;
             if (X > 0 && Y > 0)
@@ -63,12 +72,36 @@ namespace image_summer
                 s /= X * Y;
                 s = Math.Sqrt(s);
             }
-            total.Text = string.Format("mean = {0:0.00}, stddev = {1:0.000}", t, s);
+            total.Text = string.Format("mean = {0:0.00}, stddev = {1:0.00}, stderr = {2:0.00}", t, s, s / t * 100);
         }
 
         private void picture_MouseUp(object sender, MouseEventArgs e)
         {
             draw = false;
+        }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+            if (X > 0 && Y > 0)
+            {
+                try
+                {
+                    double m = double.Parse(mul.Text);
+                    Bitmap b = picture.Image as Bitmap;
+                    
+                    for (int x = x0; x <= x1 && x < b.Width; x++)
+                        for (int y = y0; y <= y1 && y < b.Height; y++)
+                        {
+                            double c = b.GetPixel(x, y).G;
+                            c *= m;
+                            int d = c < 255 ? ((int)c) : 255;
+                            b.SetPixel(x, y, Color.FromArgb(d,d,d));
+                        }
+                }
+                catch (Exception ex)
+                { MessageBox.Show(ex.Message); }
+            }
+            picture.Refresh();
         }
 
         bool draw = false;
