@@ -47,7 +47,6 @@ namespace image_summer
                 for (int y = y0; y <= y1 && y < b.Height; y++)
                     t += b.GetPixel(x, y).G;
             total.Text = t.ToString();
-
         }
 
         private void picture_MouseUp(object sender, MouseEventArgs e)
