@@ -42,11 +42,13 @@ namespace image_summer
 
             //calc
             Bitmap b = picture.Image as Bitmap;
-            long t = 0;
+            double t = 0;
             for (int x = x0; x <= x1 && x < b.Width; x++)
                 for (int y = y0; y <= y1 && y < b.Height; y++)
                     t += b.GetPixel(x, y).G;
-            total.Text = t.ToString();
+            t /= x1 - x0 + 1;
+            t /= y1 - y0 + 1;
+            total.Text = string.Format("{0:0.00}", t);
         }
 
         private void picture_MouseUp(object sender, MouseEventArgs e)
