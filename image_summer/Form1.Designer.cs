@@ -101,7 +101,7 @@
             this.total.Font = new System.Drawing.Font("Microsoft Sans Serif", 15F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.total.Location = new System.Drawing.Point(350, 20);
             this.total.Name = "total";
-            this.total.Size = new System.Drawing.Size(162, 39);
+            this.total.Size = new System.Drawing.Size(591, 39);
             this.total.TabIndex = 2;
             this.total.Text = "0";
             // 

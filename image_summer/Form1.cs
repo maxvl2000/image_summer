@@ -41,14 +41,29 @@ namespace image_summer
             }
 
             //calc
-            Bitmap b = picture.Image as Bitmap;
+            int X = x1 - x0 + 1, Y = y1 - y0 + 1;
             double t = 0;
-            for (int x = x0; x <= x1 && x < b.Width; x++)
-                for (int y = y0; y <= y1 && y < b.Height; y++)
-                    t += b.GetPixel(x, y).G;
-            t /= x1 - x0 + 1;
-            t /= y1 - y0 + 1;
-            total.Text = string.Format("{0:0.00}", t);
+            double s = 0;
+            if (X > 0 && Y > 0)
+            {
+                var g = new int[X, Y];
+                Bitmap b = picture.Image as Bitmap;
+
+                for (int x = x0; x <= x1 && x < b.Width; x++)
+                    for (int y = y0; y <= y1 && y < b.Height; y++)
+                    {
+                        g[x - x0, y - y0] = b.GetPixel(x, y).G;
+                        t += g[x - x0, y - y0];
+                    }
+                t /= X * Y;
+
+                for (int x = 0; x < X; x++)
+                    for (int y = 0; y < Y; y++)
+                        s += (t - g[x, y]) * (t - g[x, y]);
+                s /= X * Y;
+                s = Math.Sqrt(s);
+            }
+            total.Text = string.Format("mean = {0:0.00}, stddev = {1:0.000}", t, s);
         }
 
         private void picture_MouseUp(object sender, MouseEventArgs e)
