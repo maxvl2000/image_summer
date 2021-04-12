@@ -8,7 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace image_summer
+namespace image_summer      //Calculates a mean value of a custom area on a picture / set of pictures
 {
     public partial class Form1 : Form
     {
